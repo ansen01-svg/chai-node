@@ -1,4 +1,4 @@
-const cloudinary = require("cloudinary").v2();
+const cloudinary = require("cloudinary").v2;
 const fs = require("node:fs");
 
 // Configuration
@@ -26,7 +26,6 @@ const uploadToCloudinary = async (localImageAddress) => {
 
     return uploadResult;
   } catch (error) {
-    console.log("Error uploading file to cloudinary", error);
     fs.unlinkSync(localImageAddress);
     return null;
   }

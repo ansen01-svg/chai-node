@@ -4,6 +4,7 @@ const mongoSanitize = require("express-mongo-sanitize");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const rateLimit = require("express-rate-limit");
+const userRouter = require("./routes/user.route");
 
 const app = express();
 
@@ -26,5 +27,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use("/api/v1/users", userRouter);
 
 module.exports = app;

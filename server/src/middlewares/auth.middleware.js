@@ -1,33 +1,33 @@
 const jwt = require("jsonwebtoken");
+const User = require("../models/user.model");
+const asyncHandler = require("../utils/asyncHandler");
 const ApiError = require("../utils/apiErrors");
 
-const verifyJwt = async (token) => {
+const verifyJwt = (token) => {
   try {
-    const verifiedToken = await jwt.verify(token, process.env.JWT_SECRET);
-    return verifiedToken;
+    return jwt.verify(token, process.env.JWT_SECRET);
   } catch (error) {
-    console.error(error);
+    throw new ApiError(401, "An error occured while veryfying jwt token");
   }
 };
 
-const authMiddleware = async (req, _, next) => {
+const authMiddleware = asyncHandler(async (req, _, next) => {
   const token = req.cookies?.accessToken;
 
   if (!token) {
-    throw new ApiError(401, "Unauthorised user");
+    throw new ApiError(401, "Unauthorized user");
   }
 
-  const verifiedToken = await verifyJwt(token);
+  const verifiedToken = verifyJwt(token);
 
   if (!verifiedToken) {
     throw new ApiError(401, "Unauthorised user");
   }
 
-  // find user with verifiedToken._id
-  //attach user to req
+  const user = await User.findById({ _id: verifiedToken._id });
 
-  req.user = verifiedToken;
+  req.user = user;
   next();
-};
+});
 
 module.exports = authMiddleware;

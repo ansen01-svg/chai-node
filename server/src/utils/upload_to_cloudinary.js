@@ -11,7 +11,7 @@ cloudinary.config({
 const uploadToCloudinary = async (localImageAddress) => {
   try {
     if (!localImageAddress) return null;
-
+    console.log(localImageAddress);
     // Upload an image
     const uploadResult = await cloudinary.uploader
       .upload(localImageAddress, {

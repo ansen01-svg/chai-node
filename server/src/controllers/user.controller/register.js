@@ -14,7 +14,7 @@ const register = asyncHandler(async (req, res) => {
     $or: [{ username }, { email }],
   });
 
-  if (registeringUser) {
+  if (registeringUser.length) {
     throw new ApiError(401, "User already exists");
   }
 
@@ -24,7 +24,9 @@ const register = asyncHandler(async (req, res) => {
     password,
   });
 
-  const createdUser = await User.findById({ _id: user._id });
+  const createdUser = await User.findById({ _id: user._id }).select(
+    "-password"
+  );
 
   if (!createdUser) {
     throw new ApiError(500, "Something went wrong while creating user");

@@ -6,7 +6,7 @@ const uploadToCloudinary = require("../../utils/upload_to_cloudinary");
 
 const addAvatar = asyncHandler(async (req, res) => {
   const { avatar } = req.file;
-
+  console.log(avatar);
   if (!avatar) {
     throw new ApiError(401, "Please provide avatar");
   }
@@ -16,7 +16,7 @@ const addAvatar = asyncHandler(async (req, res) => {
   );
 
   const response = await uploadToCloudinary(avatar);
-  console.log(response);
+  console.log("add avatar controller", response);
 
   if (!response) {
     throw new ApiError(401, "Invalid avatar");

@@ -17,13 +17,13 @@ const login = asyncHandler(async (req, res) => {
     throw new ApiError(401, "User does not exist");
   }
 
-  const passwordIsCorrect = await User.comparePassword(password);
+  const passwordIsCorrect = await user.comparePassword(password);
 
   if (!passwordIsCorrect) {
     throw new ApiError(401, "Incorrect password");
   }
 
-  const { accessToken, refreshToken } = generateAccessAndRefreshTokens(
+  const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(
     user._id
   );
 
@@ -37,7 +37,7 @@ const login = asyncHandler(async (req, res) => {
   };
 
   return res
-    .json(200)
+    .status(200)
     .cookie("accessToken", accessToken, cookieOptions)
     .cookie("refreshToken", refreshToken, cookieOptions)
     .json(new ApiResponse(200, currentUser, "Logged in successfully"));
